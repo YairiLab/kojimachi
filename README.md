@@ -1,0 +1,2 @@
+# kojimachi
+加速度などを取るセンサアプリを、Bluetoothで遠隔操作するiOSアプリ
