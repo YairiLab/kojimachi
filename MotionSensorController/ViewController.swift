@@ -20,7 +20,7 @@ class ViewController: UIViewController, MSCentralManagerDelegate {
     
     @IBAction func stopScan(sender: UIButton) {
         beep()
-        speak("\(central.peripherals.count) peripherals found")
+        speak(s: "\(central.peripherals.count) peripherals found")
         central.stopScan()
     }
     
@@ -56,11 +56,11 @@ class ViewController: UIViewController, MSCentralManagerDelegate {
     }
     
     func beep() {
-        speaker.speak("peep")
+        speaker.speak(s: "peep")
     }
     
     func speak(s: String) {
-        speaker.speak(s)
+        speaker.speak(s: s)
     }
 }
 

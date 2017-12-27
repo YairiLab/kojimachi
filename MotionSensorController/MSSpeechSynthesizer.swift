@@ -16,12 +16,12 @@ public class MSSpeechSynthesizer: NSObject {
     }
     
     public func speak(s: String) {
-        if speaker.speaking {
-            speaker.stopSpeakingAtBoundary(.Immediate)
+        if speaker.isSpeaking {
+            speaker.stopSpeaking(at: .immediate)
         }
         let ut = AVSpeechUtterance(string: s)
         ut.voice = AVSpeechSynthesisVoice(language: "en-us")
         ut.rate = 0.5
-        speaker.speakUtterance(ut)
+        speaker.speak(ut)
     }
 }

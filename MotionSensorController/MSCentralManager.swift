@@ -30,21 +30,21 @@ class MSCentralManager: NSObject,
         central = CBCentralManager(delegate: self, queue: nil)
     }
     
-    func centralManagerDidUpdateState(central: CBCentralManager) {
-        delegate.log("\(central.state)")
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        delegate.log(s: "\(central.state)")
     }
     
     func scan() {
-        central.scanForPeripheralsWithServices(
-            [MSCentralManager.servUuid],
+        central.scanForPeripherals(
+            withServices: [MSCentralManager.servUuid],
             options: nil)
     }
     
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        delegate.log("peripheral found: \(peripheral). advertisementData:\(advertisementData)")
+        delegate.log(s: "peripheral found: \(peripheral). advertisementData:\(advertisementData)")
         
-        central.connectPeripheral(peripheral, options: nil)
-        delegate.log("peripheral \(peripheral.name ?? "no name") is connected")
+        central.connect(peripheral, options: nil)
+        delegate.log(s: "peripheral \(peripheral.name ?? "no name") is connected")
         peripheral.delegate = self
         peripherals[peripheral] = []
         
@@ -57,8 +57,8 @@ class MSCentralManager: NSObject,
     func sensorStart() {
         for (p, chars) in peripherals {
             for c in chars {
-                let data = "start".dataUsingEncoding(NSUTF8StringEncoding)
-                p.writeValue(data!, forCharacteristic: c, type: .WithResponse)
+                let data = "start".data(using: String.Encoding.utf8)
+                p.writeValue(data!, for: c, type: .withResponse)
             }
         }
     }
@@ -67,8 +67,8 @@ class MSCentralManager: NSObject,
     func sensorStop() {
         for (p, chars) in peripherals {
             for c in chars {
-                let data = "stop".dataUsingEncoding(NSUTF8StringEncoding)
-                p.writeValue(data!, forCharacteristic: c, type: .WithResponse)
+                let data = "stop".data(using: String.Encoding.utf8)
+                p.writeValue(data!, for: c, type: .withResponse)
             }
         }
     }
@@ -76,8 +76,8 @@ class MSCentralManager: NSObject,
     func textWrite() {
         for (p, chars) in peripherals {
             for c in chars {
-                let data = "write:Hello!".dataUsingEncoding(NSUTF8StringEncoding)
-                p.writeValue(data!, forCharacteristic: c, type: .WithResponse)
+                let data = "write:Hello!".data(using: String.Encoding.utf8)
+                p.writeValue(data!, for: c, type: .withResponse)
             }
         }
     }
@@ -85,52 +85,52 @@ class MSCentralManager: NSObject,
     func introduce() {
         for (p, chars) in peripherals {
             for c in chars {
-                let data = "introduce".dataUsingEncoding(NSUTF8StringEncoding)
-                p.writeValue(data!, forCharacteristic: c, type: .WithResponse)
+                let data = "introduce".data(using: String.Encoding.utf8)
+                p.writeValue(data!, for: c, type: .withResponse)
             }
         }
     }
 
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        delegate.log("peripheral \(peripheral.name ?? "no name") is connected")
+        delegate.log(s: "peripheral \(peripheral.name ?? "no name") is connected")
         peripheral.discoverServices(nil)
     }
     
-    func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        delegate.log("ERROR: \(error)")
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        delegate.log(s: "ERROR: \(String(describing: error))")
     }
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         for s in peripheral.services! {
-            delegate.log("service found: \(s), \(s.UUID.UUIDString)")
-            if s.UUID.isEqual(MSCentralManager.servUuid) {
-                peripheral.discoverCharacteristics(nil, forService: s)
+            delegate.log(s: "service found: \(s), \(s.uuid.uuidString)")
+            if s.uuid.isEqual(MSCentralManager.servUuid) {
+                peripheral.discoverCharacteristics(nil, for: s)
             }
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         peripherals[peripheral] = service.characteristics!
         for char in service.characteristics! {
-            delegate.log("charecteristic found: \(char.UUID) at \(peripheral.name!)")
+            delegate.log(s: "charecteristic found: \(char.uuid) at \(peripheral.name!)")
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
             if let e = error {
-                delegate.log("ERROR: \(e)")
+                delegate.log(s: "ERROR: \(e)")
             } else {
-                let s = NSString(data: characteristic.value!, encoding: NSUTF8StringEncoding)
-                delegate.log("\(characteristic.UUID) returned \(s)")
+                let s = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue)
+                delegate.log(s: "\(characteristic.uuid) returned \(String(describing: s))")
             }
     }
     
-    func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
             if let e = error {
-                delegate.log("ERROR: \(e)")
+                delegate.log(s: "ERROR: \(e)")
             } else {
                 //let s = NSString(data: characteristic.value!, encoding: NSUTF8StringEncoding)
-                delegate.log("\(characteristic.UUID) succeeded")
+                delegate.log(s: "\(characteristic.uuid) succeeded")
             }
     }
 }
