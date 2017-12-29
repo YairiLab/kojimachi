@@ -36,11 +36,16 @@ class MSCentralManager: NSObject,
     
     func scan() {
         central.scanForPeripherals(
-            withServices: [MSCentralManager.servUuid],
-            options: nil)
+                    withServices: [MSCentralManager.servUuid],
+                    options: nil)
     }
     
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+    // ペリフェラルが発見されたら呼ばれる
+    func centralManager(
+                    _ central: CBCentralManager,
+                    didDiscover peripheral: CBPeripheral,
+                    advertisementData: [String : Any],
+                    rssi: NSNumber) {
         delegate.log(s: "peripheral found: \(peripheral). advertisementData:\(advertisementData)")
         
         central.connect(peripheral, options: nil)
@@ -91,15 +96,14 @@ class MSCentralManager: NSObject,
         }
     }
 
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+    // ペリフェラルに接続したら呼ばれる
+    func centralManager(_ central: CBCentralManager,
+                        didConnect peripheral: CBPeripheral) {
         delegate.log(s: "peripheral \(peripheral.name ?? "no name") is connected")
         peripheral.discoverServices(nil)
     }
     
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        delegate.log(s: "ERROR: \(String(describing: error))")
-    }
-    
+    // サービスを発見したら呼ばれる
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         for s in peripheral.services! {
             delegate.log(s: "service found: \(s), \(s.uuid.uuidString)")
@@ -109,13 +113,17 @@ class MSCentralManager: NSObject,
         }
     }
     
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+    // サービスの特性を発見したら呼ばれる
+    func peripheral(_ peripheral: CBPeripheral,
+                    didDiscoverCharacteristicsFor service: CBService,
+                    error: Error?) {
         peripherals[peripheral] = service.characteristics!
         for char in service.characteristics! {
             delegate.log(s: "charecteristic found: \(char.uuid) at \(peripheral.name!)")
         }
     }
     
+    // ペリフェラルからコールバックされたら呼ばれる（ペリフェラル側が未実装）
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
             if let e = error {
                 delegate.log(s: "ERROR: \(e)")
@@ -125,8 +133,11 @@ class MSCentralManager: NSObject,
             }
     }
     
-    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-            if let e = error {
+    // 書き込みができたら呼ばれる
+    func peripheral(_ peripheral: CBPeripheral,
+                    didWriteValueFor characteristic: CBCharacteristic,
+                    error: Error?) {
+        if let e = error {
                 delegate.log(s: "ERROR: \(e)")
             } else {
                 //let s = NSString(data: characteristic.value!, encoding: NSUTF8StringEncoding)

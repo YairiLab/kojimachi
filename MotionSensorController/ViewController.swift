@@ -13,33 +13,33 @@ class ViewController: UIViewController, MSCentralManagerDelegate {
     var central: MSCentralManager!
     
     @IBOutlet weak var label: UILabel!
-    @IBAction func scan(sender: UIButton) {
+    @IBAction func scan(_ sender: UIButton) {
         beep()
         central.scan()
     }
     
-    @IBAction func stopScan(sender: UIButton) {
+    @IBAction func stopScan(_ sender: UIButton) {
         beep()
         speak(s: "\(central.peripherals.count) peripherals found")
         central.stopScan()
     }
     
-    @IBAction func comTest(sender: UIButton) {
+    @IBAction func comTest(_ sender: UIButton) {
         beep()
         central.textWrite()
     }
     
-    @IBAction func comTest2(sender: UIButton) {
+    @IBAction func comTest2(_ sender: UIButton) {
         beep()
         central.introduce()
     }
     
-    @IBAction func sensorStart(sender: UIButton) {
+    @IBAction func sensorStart(_ sender: UIButton) {
         beep()
         central.sensorStart()
     }
     
-    @IBAction func sensorStop(sender: UIButton) {
+    @IBAction func sensorStop(_ sender: UIButton) {
         beep()
         central.sensorStop()
     }

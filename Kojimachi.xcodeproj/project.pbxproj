@@ -103,6 +103,7 @@
 				TargetAttributes = {
 					4ADCA2591C02971100B09EAE = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = EJ9YN4K3N2;
 					};
 				};
 			};
@@ -259,8 +260,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = EJ9YN4K3N2;
 				INFOPLIST_FILE = MotionSensorController/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.yairilab.MotionSensorController;
 				PRODUCT_NAME = MotionSensorController;
@@ -274,8 +276,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = EJ9YN4K3N2;
 				INFOPLIST_FILE = MotionSensorController/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.yairilab.MotionSensorController;
 				PRODUCT_NAME = MotionSensorController;
